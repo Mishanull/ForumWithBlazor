@@ -1,0 +1,97 @@
+﻿@page "/CreatePost"
+@using Contract
+@using Entities
+@using UIElements
+@using BlazorLoginApp.Authentication
+@using System.Security.Claims
+@inject IPostService _postService
+@inject IAuthService _authService
+@inject IUserService _userService
+@inject NavigationManager navMgr
+<AuthorizeView>
+    <Authorized Context="Auth">
+          
+        <div class="d-flex flex-column align-items-center mt-5 mb-5">
+            <div class="card">
+                <h5 class="card-header bg-light" style="background-color: #2cccc4">Your Post</h5>
+                <div class="card-body">
+                    <EditForm Model="@newPost" OnValidSubmit="@AddNewPost">
+                        <DataAnnotationsValidator/> 
+                        <ValidationSummary/>
+                        <InputText @bind-Value="newPost.Title" class="form-control form-control-lg" type="text" placeholder="Title"/>
+                        <br/>
+                        <InputText @bind-Value="newPost.Subtitle" class="form-control form-control-lg" type="text" placeholder="Subtitle"/>
+                        <br/>
+                        <InputTextArea @bind-Value="newPost.Content" class="form-control" placeholder="Content..." rows="4"/>
+                        <br/>
+                        <button class="btn btn-primary" type="submit">Create post</button>
+                    </EditForm>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(errorLabel))
+            {
+                <label>@errorLabel</label>
+            }
+            @if (showModal)
+            {
+                <Modal>
+                    <p>Created Post Succesfully</p>
+                    <img src="img/200.gif"/>
+                    <br/>
+                    <br/>
+                    <button class="btn btn-primary" @onclick="@Proceed">Proceed</button>
+                </Modal>
+            }
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <div class="d-flex flex-column align-items-center">
+            <h2>You are not logged in, so you cannot create a post.</h2>
+            <br/>
+            <div class="row">
+                <div class="col-6"><button @onclick="@(() => navMgr.NavigateTo("/Login"))" class="btn btn-primary" type="button">Login</button></div>
+                <div class="col-6"><button @onclick="@(() => navMgr.NavigateTo("/Register"))" class="btn btn-primary" type="button">Register</button></div>
+            </div>
+            
+        </div>
+    </NotAuthorized>
+</AuthorizeView>
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    
+    private IEnumerable<Claim> _claims;
+    private ClaimsPrincipal? user;
+    private Post newPost = new Post();
+    private string errorLabel=String.Empty;
+
+    private bool showModal;
+
+    private async Task AddNewPost()
+    {
+        errorLabel = "";
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            user = authState.User;
+            Claim userName = user.Claims.First(c => c.Type.Equals("UserName"));
+            User? u = await _userService.GetUserAsync(userName.Value);
+            newPost.WrittenBy = u;
+            await _postService.CreatePostAsync(newPost);
+            showModal = true;
+            newPost = new Post();
+        }
+        catch (Exception e)
+        {
+            errorLabel = e.Message;
+            Console.WriteLine(e.StackTrace);
+        }
+    }
+
+    private void Proceed()
+    {
+        navMgr.NavigateTo("/");
+        showModal = false;
+        
+    }
+}

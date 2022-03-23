@@ -1,0 +1,90 @@
+﻿@page "/Register"
+@using Entities
+@using Contract
+@inject NavigationManager navMgr;
+@inject IUserService _userService;
+<h3>Register</h3>
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="card">
+            <h3>Register here</h3>
+            <div class="field">
+                <label>User name:</label>
+                <input type="text" @bind="userName"/>
+            </div>
+            <div class="field">
+                <label style="text-align: center">Password:</label>
+                <input type="password" @bind="password"/>
+            </div>
+            <div class="field">
+                <label style="text-align: center">Repeat Password:</label>
+                <input type="password"  @bind="rePassword"/>
+            </div>
+            <div class="field">
+                <label style="text-align: center">Full Name:</label>
+                <input type="text"  @bind="name"/>
+            </div>
+            @if (!string.IsNullOrEmpty(errorLabel))
+            {
+                <div class="field">
+                    <label style="color: red">
+                        @errorLabel
+                    </label>
+                </div>
+            }
+            <div class="field">
+                <button class="btn btn-primary" @onclick="RegisterAsync">Register</button>
+            </div>
+        </div>
+    </NotAuthorized>
+    <Authorized>
+        <h1>You're already registered and logged in @context.User.Identity.Name!</h1>
+    </Authorized>
+</AuthorizeView>
+@code {
+    string userName;
+    string password;
+    string name;
+    string errorLabel;
+    string rePassword;
+    private async Task RegisterAsync()
+    {
+        errorLabel = "";
+        if (CheckRepassword().Result)
+        {
+            try
+            {
+                User u = new User
+                {
+                    Name = name,
+                    Password = password,
+                    UserName = userName,
+                    Role = "Basic",
+                    SecurityLevel = 1
+                };
+
+                await _userService.CreateUserAsync(u);
+                navMgr.NavigateTo("/Login");
+            }
+            catch (Exception e)
+            {
+                errorLabel = $"Error: {e.Message}";
+            }
+        }
+        else
+        {
+
+            errorLabel = "Password and re-typed password do not match";
+        }
+    }
+
+    private async Task<bool> CheckRepassword()
+    {
+        if (!password.Equals(rePassword))
+        {
+            return false;
+        }
+        return true;
+    }
+
+}

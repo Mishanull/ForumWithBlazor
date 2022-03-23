@@ -1,0 +1,85 @@
+﻿@page "/ForumPost/{id:int}"
+@using Entities
+@using Contract
+@inject IPostService _postService
+<div
+    class="bg-image d-flex justify-content-center align-items-center"
+    style="
+    background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/015.webp');
+    height: 30vh;
+  ">
+    <div class="mask" style="background-color: rgba(178, 60, 253, 0.6);">
+        <div class="d-flex justify-content-center align-items-center mt-5 flex-column">
+            <h1 class="text-white  align-self-center" style="color: white !important;">@post.Title</h1>
+            <h2 class="text-white align-self-center " style=" background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
+                                                                 background-position: 0 100%;
+                                                                 background-size: 100% 2px;
+                                                                 background-repeat: repeat-x;">@post.Subtitle</h2>
+        </div>
+    </div>
+    
+</div>
+<main class="mt-4 mb-5">
+<div class="container">
+  <!--Grid row-->
+  <div class="row">
+    <!--Grid column-->
+    <div class="col-md-8 mb-4">
+      <!--Section: Post data-mdb-->
+      <section class="border-bottom mb-4">
+       
+
+        <div class="row align-items-center mb-4">
+          <div class="col-lg-6 text-center text-lg-start mb-3 m-lg-0">
+            <img src="img/punk_avatar_user_boy_young_musician_-512.webp" class="rounded-5 shadow-1-strong me-2"
+                 height="35" alt="" loading="lazy" />
+            <span> Posted at <u>@DateTime.Today.Date.ToShortDateString()</u> by</span>
+            <a href="" class="text-dark">@post.WrittenBy?.UserName</a>
+          </div>
+
+          <div class="col-lg-6 text-center text-lg-end">
+            <button type="button" class="btn btn-primary px-3 me-1" style="background-color: #3b5998;">
+              <i class="fab fa-facebook-f"></i>
+            </button>
+            <button type="button" class="btn btn-primary px-3 me-1" style="background-color: #55acee;">
+              <i class="fab fa-twitter"></i>
+            </button>
+            <button type="button" class="btn btn-primary px-3 me-1" style="background-color: #0082ca;">
+              <i class="fab fa-linkedin"></i>
+            </button>
+            <button type="button" class="btn btn-primary px-3 me-1">
+              <i class="fas fa-comments"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+      <!--Section: Post data-mdb-->
+
+      <!--Section: Text-->
+      <section>
+        <p>
+          @post.Content
+        </p>
+       
+       
+      </section>
+    </div>
+  </div>
+</div>
+</main>
+
+@code {
+    [Parameter]
+    public virtual int? Id { get; set; }
+    
+    public virtual  Post post { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id.HasValue)
+        {
+            post = await _postService.GetPostByIdAsync(Id.Value);
+        }
+        await base.OnParametersSetAsync();
+    }
+
+}

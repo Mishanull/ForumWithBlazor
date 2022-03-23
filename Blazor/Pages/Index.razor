@@ -1,0 +1,84 @@
+@page "/"
+@using Entities
+@using Contract
+@inject IPostService _postService
+@inject NavigationManager navMgr
+<PageTitle>Index</PageTitle>
+<div
+    class="text-center bg-image"
+    style="
+      background-image: url('img/logo_transparent.png');
+      height: 100vh;
+    ">
+    
+        <div class="mask " style="background-color: rgba(77, 0, 255, 0.48);">
+            <div class="d-flex justify-content-center align-items-center h-100">
+                <div class="text-white">
+                    <br/>
+                    <h1 class="mb-3">Welcome to the Punk Forum</h1>
+                    <h4 class="mb-3">A place where both punkists and music enthusiasts can fire up a conversation </h4>
+
+                </div>
+            </div>
+        </div>
+    
+</div>
+
+<hr/>
+
+<br>
+<div class="container-fluid">
+    <div class="d-flex flex-column align-items-center ">
+        <div class="mb-3 w-100">
+            <textarea style="resize: none; border: #2cccc4 2px solid; border-radius: 10px;" @onclick="GoToAdd" class="form-control" placeholder="  Click here to create a new post..." id="createPostTextArea" rows="4"></textarea>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    @if (allPosts == null)
+    {
+        <p>
+            <em>Loading...</em>
+        </p>
+    }
+    else if (!allPosts.Any())
+    {
+        <p>
+            <em>No posts exist. Please add some.</em>
+        </p>
+    }
+    else
+    {
+        @foreach (var post in allPosts)
+        {
+            <div class="card text-center mb-5 mx-auto " style="border: 2px black solid;">
+                <div class="card-header " style="background-color: #6e02b1 !important; color: #b6d4fe; font-family: 'Permanent Marker', cursive;">
+                    <h2> @post.Title</h2>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">@post.Subtitle</h4>
+                    <p class="card-text">@post.Content</p>
+                    <a @onclick="@(()=>navMgr.NavigateTo("/ForumPost/"+@post.Id))" class="btn btn-primary">Check this thread out</a>
+                </div>
+                <div class="card-footer bg-light">
+                    <p class="card-text">Written by @post.WrittenBy?.UserName</p>
+                </div>
+            </div>
+            <br/>
+        }
+    }
+</div>
+@code{
+
+    private ICollection<Post>? allPosts;
+    protected override async Task OnInitializedAsync()
+    {
+        allPosts = await _postService.GetAllPosts();
+    }
+
+    private void GoToAdd()
+    {
+        navMgr.NavigateTo("/createPost");
+    }
+
+}
