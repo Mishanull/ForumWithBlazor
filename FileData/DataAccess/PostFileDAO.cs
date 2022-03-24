@@ -14,9 +14,16 @@ public class PostFileDAO : IPostDAO
 
     public async Task CreatePostAsync(Post post)
     {
-        var largestId = _context.Forum.Posts.Max(p => p.Id);
-        post.Id = largestId + 1;
-        _context.Forum.Posts.Add(post);
+        if (_context.Forum.Posts != null && _context.Forum.Posts.Any())
+        {
+            var largestId = _context.Forum.Posts.Max(p => p.Id);
+            post.Id = largestId + 1;
+        }
+        else
+        {
+            post.Id = 1;
+        }
+        _context.Forum.Posts?.Add(post);
         await _context.SaveChangesAsync();
     }
 

@@ -13,7 +13,7 @@
           
         <div class="d-flex flex-column align-items-center mt-5 mb-5">
             <div class="card">
-                <h5 class="card-header bg-light" style="background-color: #2cccc4">Your Post</h5>
+                <h5 class="card-header bg-light" style="background-color: #2cccc4;">Your Post</h5>
                 <div class="card-body">
                     <EditForm Model="@newPost" OnValidSubmit="@AddNewPost">
                         <DataAnnotationsValidator/> 
@@ -30,16 +30,18 @@
             </div>
             @if (!string.IsNullOrEmpty(errorLabel))
             {
-                <label>@errorLabel</label>
+                <label style="color: red;">Error: @errorLabel</label>
             }
             @if (showModal)
             {
                 <Modal>
-                    <p>Created Post Succesfully</p>
-                    <img src="img/200.gif"/>
-                    <br/>
-                    <br/>
-                    <button class="btn btn-primary" @onclick="@Proceed">Proceed</button>
+                    <div class="d-flex flex-column align-items-center">
+                        <p>Created Post Succesfully</p>
+                        <img src="img/200.gif"/>
+                        <br/>
+                        <br/>
+                        <button class="btn btn-primary" @onclick="@Proceed">Proceed</button>
+                    </div>
                 </Modal>
             }
         </div>
@@ -84,7 +86,6 @@
         catch (Exception e)
         {
             errorLabel = e.Message;
-            Console.WriteLine(e.StackTrace);
         }
     }
 

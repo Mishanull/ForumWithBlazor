@@ -15,7 +15,13 @@ public class PostServiceImpl : IPostService
 
     public async Task CreatePostAsync(Post post)
     {
+        if (string.IsNullOrEmpty(post.Content) || string.IsNullOrEmpty(post.Title) ||
+            string.IsNullOrEmpty(post.Subtitle))
+        {
+            throw new Exception("All fields in the post have to be filled");
+        } 
         await _dao.CreatePostAsync(post);
+        
     }
 
     public Task<Post> GetPostByIdAsync(int id)
