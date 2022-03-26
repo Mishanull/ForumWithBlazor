@@ -20,7 +20,6 @@ public class UserServiceImpl : IUserService
 
     public async Task CreateUserAsync(User user)
     {
-        //TODO validate user and throw exception if not valid
         await _userDao.CreateUserAsync(user);
     }
 }

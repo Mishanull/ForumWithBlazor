@@ -3,9 +3,7 @@
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
-.page{
-    background-color: #b9b1cb5e;
-}
+
 *{
     box-sizing:border-box;
 }
@@ -21,7 +19,9 @@ h2,h3,h4{
 a, .btn-link {
     color: #0071c1;
 }
-
+a, .btn-link:hover{
+    cursor: pointer;
+}
 .btn-primary {
     color: #fff;
     background-color: #2cccc4 !important;
@@ -87,6 +87,6 @@ a.nav-link{
 }
 hr {
     border: none;
-    height: 0px;
-    box-shadow: 0 1px 4px 1px #10bad7;
+    height: 5px;
+    box-shadow: 0 2px 4px 1px #8633e7;
 }

@@ -36,4 +36,32 @@ public class PostFileDAO : IPostDAO
     {
         return Task.FromResult(_context.Forum.Posts);
     }
+
+    public  async Task DeletePostAsync(int id)
+    {
+         _context.Forum.Posts?.Remove(_context.Forum.Posts.First((post => post.Id == id)));
+         await _context.SaveChangesAsync();
+    }
+
+    public async Task EditPostAsync(Post post)
+    {
+        Post p = _context.Forum.Posts.First(p => post.Id == p.Id);
+        p.Content = post.Content;
+        p.Title = post.Title;
+        p.Subtitle = post.Subtitle;
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddCommentToPost(Comment comment, int id)
+    {
+        Post p = _context.Forum.Posts.First(p => id == p.Id);
+        p.Comments.Add(comment);
+        await _context.SaveChangesAsync();
+    }
+
+    public Task<ICollection<Comment>> GetComments(int id)
+    {
+        Post p = _context.Forum.Posts.First(p => id == p.Id);
+        return  Task.FromResult(p.Comments!);
+    }
 }

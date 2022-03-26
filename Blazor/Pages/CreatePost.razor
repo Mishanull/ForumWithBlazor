@@ -11,9 +11,9 @@
 <AuthorizeView>
     <Authorized Context="Auth">
           
-        <div class="d-flex flex-column align-items-center mt-5 mb-5">
-            <div class="card">
-                <h5 class="card-header bg-light" style="background-color: #2cccc4;">Your Post</h5>
+        <div class="d-flex flex-column align-items-center mt-5 mb-5" >
+            <div class="card"  style="border: #2cccc4 2px solid;">
+                <h5 class="card-header " style="background-color: #6e02b1 !important; color: #b6d4fe; font-family: 'Permanent Marker', cursive;">Your Post</h5>
                 <div class="card-body">
                     <EditForm Model="@newPost" OnValidSubmit="@AddNewPost">
                         <DataAnnotationsValidator/> 
@@ -47,7 +47,7 @@
         </div>
     </Authorized>
     <NotAuthorized>
-        <div class="d-flex flex-column align-items-center">
+        <div class="d-flex flex-column align-items-center mt-5">
             <h2>You are not logged in, so you cannot create a post.</h2>
             <br/>
             <div class="row">
@@ -62,7 +62,6 @@
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; }
     
-    private IEnumerable<Claim> _claims;
     private ClaimsPrincipal? user;
     private Post newPost = new Post();
     private string errorLabel=String.Empty;

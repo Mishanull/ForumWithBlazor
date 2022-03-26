@@ -33,4 +33,24 @@ public class PostServiceImpl : IPostService
     {
         return _dao.GetAllPosts();
     }
+
+    public async Task DeletePostAsync(int id)
+    {
+        await _dao.DeletePostAsync(id);
+    }
+
+    public async Task EditPostAsync(Post post)
+    {
+       await _dao.EditPostAsync(post);
+    }
+
+    public async Task AddCommentToPost(Comment comment, int id)
+    {
+        await _dao.AddCommentToPost(comment,id);
+    }
+
+    public  Task<ICollection<Comment>> GetComments(int id)
+    {
+        return  _dao.GetComments(id);
+    }
 }

@@ -1,19 +1,23 @@
 @page "/"
 @using Entities
 @using Contract
+@using UIElements
+@using BlazorLoginApp.Authentication
+@using System.Security.Claims
 @inject IPostService _postService
+@inject IAuthService _authService
 @inject NavigationManager navMgr
 <PageTitle>Index</PageTitle>
 <div
     class="text-center bg-image"
     style="
       background-image: url('img/logo_transparent.png');
-      height: 100vh ;
+      height: 115vh ;
     ">
     
         <div class="mask " style="background-color: rgba(77, 0, 255, 0.5);">
             <div class="d-flex justify-content-center align-items-center h-100">
-                <div class="text-black">
+                <div class="text-white">
                     <br/>
                     <h1 class="mb-3">Welcome to the Punk Forum</h1>
                     <h4 class="mb-3">A place where both punkists and music enthusiasts can fire up a conversation </h4>
@@ -29,7 +33,7 @@
 <div class="container-fluid">
     <div class="d-flex flex-column align-items-center ">
         <div class="mb-3 w-100">
-            <textarea style=" resize: none; border: black 2px solid; border-radius: 10px;" @onclick="GoToAdd" class="form-control" placeholder="  Click here to create a new post..." id="createPostTextArea" rows="4"></textarea>
+            <textarea style=" resize: none; border:  #2cccc4 2px solid; border-radius: 10px;" @onclick="GoToAdd" class="form-control" placeholder="  Click here to create a new post..." id="createPostTextArea" rows="4"></textarea>
         </div>
     </div>
     <hr/>
@@ -44,16 +48,22 @@
     else if (!allPosts.Any())
     {
         <p>
-            <em>No posts exist. Please add some.</em>
+            <em>No posts exist</em>
         </p>
     }
     else
     {
         @foreach (var post in allPosts)
         {
-            <div class="card text-center mb-5 mx-auto w-50" style="border: 2px black solid;">
-                <div class="card-header " style="background-color: #2cccc4; !important; color: black; font-family: 'Permanent Marker', cursive;">
-                    <h2> @post.Title</h2>
+            <div class="card text-center mb-5 mx-auto  w-auto " style="border: #2cccc4 2px solid;">
+                <div class="card-header " style="background-color: #6e02b1 !important; color: #b6d4fe;">
+                    <h2 style="font-family: 'Permanent Marker', cursive;"> @post.Title</h2>
+                    <br/>
+                    @if (IsAllowed(post).Result)
+                    {
+                        <a @onclick="@(() => OpenModal(post.Id))" class="px-1 mx-4"><i class="oi oi-trash"></i></a>
+                        <a @onclick="@(()=>navMgr.NavigateTo("/EditPost/"+@post.Id))" class="px-1 mx-4" ><i class="oi oi-pencil"></i></a>
+                    }
                 </div>
                 <div class="card-body">
                     <h4 class="card-title">@post.Subtitle</h4>
@@ -66,12 +76,29 @@
             </div>
             <hr/>
             <br/>
+            @if (RemoveModal)
+            {
+                <Modal>
+                    
+                    <h2 class="modal-title">Are you sure you want to delete this post?</h2>
+                    <button @onclick="DeletePost" class="btn btn-primary">Yes</button>
+                    <button @onclick="CloseModal" class="btn btn-primary">No</button>
+                </Modal>
+            }
         }
     }
+    
 </div>
 @code{
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    
+    private IEnumerable<Claim> _claims;
+    private ClaimsPrincipal? user;
 
     private ICollection<Post>? allPosts;
+    private bool RemoveModal;
+    private int ToRemoveTempId=0;
     protected override async Task OnInitializedAsync()
     {
         allPosts = await _postService.GetAllPosts();
@@ -82,4 +109,34 @@
         navMgr.NavigateTo("/createPost");
     }
 
+    private async  Task  OpenModal(int id)
+    {
+        RemoveModal = true;
+        ToRemoveTempId = id;
+    }
+
+    private async Task CloseModal()
+    {
+        RemoveModal = false;
+        ToRemoveTempId = 0;
+    }
+
+    private async Task DeletePost()
+    {
+        await _postService.DeletePostAsync(ToRemoveTempId);
+        await CloseModal();
+    }
+
+    private async Task<bool> IsAllowed(Post p)
+    {
+        AuthenticationState? authState = await AuthState;
+        if (authState.User.Identity == null) return false;
+        user = authState.User;
+        Claim userName = user.Claims.First(c => c.Type.Equals("UserName"));
+        if (userName.Value.Equals(p?.WrittenBy?.UserName))
+        {
+            return true;
+        }
+        return false;
+    }
 }

@@ -20,6 +20,10 @@ public class UserFileDAO : IUserDAO
 
     public async Task CreateUserAsync(User user)
     {
+        if (fileContext.Users.Contains(user))
+        {
+            throw new Exception("Username taken, please use another. ");
+        }
         fileContext.Users.Add(user);
         fileContext.SaveChanges();
     }
