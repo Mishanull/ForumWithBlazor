@@ -53,8 +53,9 @@
     }
     else
     {
-        @foreach (var post in allPosts)
+        @for (int i=allPosts.Count-1;i>=0;i--)
         {
+            Post post = allPosts.ToArray()[i];
             <div class="card text-center mb-5 mx-auto  w-auto " style="border: #2cccc4 2px solid;">
                 <div class="card-header " style="background-color: #6e02b1 !important; color: #b6d4fe;">
                     <h2 style="font-family: 'Permanent Marker', cursive;"> @post.Title</h2>
@@ -67,7 +68,7 @@
                 </div>
                 <div class="card-body">
                     <h4 class="card-title">@post.Subtitle</h4>
-                    <p class="card-text">@post.Content</p>
+                    <br/>
                     <a @onclick="@(()=>navMgr.NavigateTo("/ForumPost/"+@post.Id))" class="btn btn-primary">Check this thread out</a>
                 </div>
                 <div class="card-footer bg-light">

@@ -60,15 +60,19 @@
                                                                              background-repeat: repeat-x;">Comments</h2>
         <br/>
         <div class="d-flex flex-column  ">
-          <EditForm Model="@_comment" OnValidSubmit="@AddComment" >
-            <DataAnnotationsValidator/>
-            <ValidationSummary/>
-            <div class="mb-3 ">
-              <InputTextArea @bind-Value="_comment.Content" style=" width: 100% !important; resize: none; border:  #2cccc4 2px solid; border-radius: 10px; "  class="form-control-lg " placeholder="  Click here to comment..." id="createPostTextArea" rows="4"></InputTextArea>
-              <br/>
-              <button  class="btn btn-primary" type="submit">Comment</button>
-            </div>
-          </EditForm>
+          <AuthorizeView>
+            <Authorized Context="Auth">
+            <EditForm Model="@_comment" OnValidSubmit="@AddComment">
+              <DataAnnotationsValidator/>
+              <ValidationSummary/>
+              <div class="mb-3 ">
+                <InputTextArea @bind-Value="_comment.Content" style=" width: 100% !important; resize: none; border:  #2cccc4 2px solid; border-radius: 10px; " class="form-control-lg " placeholder="  Click here to comment..." id="createPostTextArea" rows="4"></InputTextArea>
+                <br/>
+                <button class="btn btn-primary" type="submit">Comment</button>
+              </div>
+            </EditForm>
+            </Authorized>
+          </AuthorizeView>
         </div>
         <br/>
         @if (comments == null)
