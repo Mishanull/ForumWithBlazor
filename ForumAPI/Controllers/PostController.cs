@@ -72,5 +72,20 @@ public class PostController: ControllerBase
             return StatusCode(500, e.Message);
         }
     }
-    
+
+    [HttpDelete]
+    [Route("{id:int}")]
+    public async Task<ActionResult<String>> DeletePost([FromRoute] int id)
+    {
+        try
+        {
+            await _postService.DeletePostAsync(id);
+            return Ok("Post " + id + " succesfully deleted");
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+
 }

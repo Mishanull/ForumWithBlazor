@@ -9,6 +9,7 @@ using FileData.DataAccess;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
+using RESTClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +18,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IAuthService, AuthServiceImpl>();
 builder.Services.AddScoped<AuthenticationStateProvider, SimpleAuthenticationStateProvider>();
-builder.Services.AddScoped<IUserService, UserServiceImpl>();
-builder.Services.AddScoped<IUserDAO, UserFileDAO>();
-builder.Services.AddScoped<UserFileContext>();
-builder.Services.AddScoped<IPostService, PostServiceImpl>();
-builder.Services.AddScoped<IPostDAO, PostFileDAO>();
-builder.Services.AddScoped<PostFileContext>();
+builder.Services.AddScoped<IUserService, HttpClientUsersImpl>();
+builder.Services.AddScoped<IPostService, HttpClientPostsImpl>();
+
 
 var app = builder.Build();
 
