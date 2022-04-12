@@ -4,56 +4,65 @@
 @using Contract
 @inject IPostService _postService
 @inject NavigationManager navMgr
-<AuthorizeView>
-    <Authorized Context="Auth">
-    <div class="d-flex flex-column align-items-center mt-5 mb-5">
-        <div class="card" style="border: #2cccc4 2px solid;">
-            <h5 class="card-header " style="background-color: #6e02b1 !important; color: #b6d4fe; font-family: 'Permanent Marker', cursive;">Edit your post</h5>
-            <div class="card-body">
-                <EditForm Model="@post" OnValidSubmit="@EditNewPost">
-                    <DataAnnotationsValidator/>
-                    <ValidationSummary/>
-                    <InputText @bind-Value="post.Title" class="form-control form-control-lg" type="text" placeholder="Enter a title..."/>
-                    <br/>
-                    <InputText @bind-Value="post.Subtitle" class="form-control form-control-lg" type="text" placeholder="Enter a subtitle..."/>
-                    <br/>
-                    <InputTextArea @bind-Value="post.Content" class="form-control" placeholder="Content..." rows="4"/>
-                    <br/>
-                    <button class="btn btn-primary" type="submit">Edit post</button>
-                </EditForm>
-            </div>
-        </div>
-        @if (!string.IsNullOrEmpty(errorLabel))
-        {
-            <label style="color: red;">Error: @errorLabel</label>
-        }
-        @if (showModal)
-        {
-            <Modal>
-                <div class="d-flex flex-column align-items-center">
-                    <p>Edited Post Succesfully</p>
-                    <img src="img/200.gif"/>
-                    <br/>
-                    <br/>
-                    <button class="btn btn-primary" @onclick="@Proceed">Proceed</button>
+@if (_ready)
+{
+    <AuthorizeView>
+        <Authorized Context="Auth">
+            <div class="d-flex flex-column align-items-center mt-5 mb-5">
+                <div class="card" style="border: #2cccc4 2px solid;">
+                    <h5 class="card-header " style="background-color: #6e02b1 !important; color: #b6d4fe; font-family: 'Permanent Marker', cursive;">Edit your post</h5>
+                    <div class="card-body">
+                        <EditForm Model="@post" OnValidSubmit="@EditNewPost">
+                            <DataAnnotationsValidator/>
+                            <ValidationSummary/>
+                            <InputText @bind-Value="post.Title" class="form-control form-control-lg" type="text" placeholder="Enter a title..."/>
+                            <br/>
+                            <InputText @bind-Value="post.Subtitle" class="form-control form-control-lg" type="text" placeholder="Enter a subtitle..."/>
+                            <br/>
+                            <InputTextArea @bind-Value="post.Content" class="form-control" placeholder="Content..." rows="4"/>
+                            <br/>
+                            <button class="btn btn-primary" type="submit">Edit post</button>
+                        </EditForm>
+                    </div>
                 </div>
-            </Modal>
-        }
-    </div>
-    </Authorized>
-</AuthorizeView>
+                @if (!string.IsNullOrEmpty(errorLabel))
+                {
+                    <label style="color: red;">Error: @errorLabel</label>
+                }
+                @if (showModal)
+                {
+                    <Modal>
+                        <div class="d-flex flex-column align-items-center">
+                            <p>Edited Post Succesfully</p>
+                            <img src="img/200.gif"/>
+                            <br/>
+                            <br/>
+                            <button class="btn btn-primary" @onclick="@Proceed">Proceed</button>
+                        </div>
+                    </Modal>
+                }
+            </div>
+        </Authorized>
+    </AuthorizeView>
+}
+else
+{
+    <h1>Loading...</h1>
+}
 @code {
     [Parameter]
     public virtual int? Id { get; set; }
     
-    public virtual  Post post { get; set; }
+    public virtual  Post? post { get; set; }
     private string errorLabel;
     private bool showModal;
+    private bool _ready = false;
     protected override async Task OnParametersSetAsync()
     {
         if (Id.HasValue)
         {
             post = await _postService.GetPostByIdAsync(Id.Value);
+            _ready = true;
         }
         await base.OnParametersSetAsync();
     }

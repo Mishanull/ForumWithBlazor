@@ -4,140 +4,168 @@
 @using System.Security.Claims
 @inject IPostService _postService
 @inject IUserService _userService
+
+
+@if(_ready){
 <div
+  class="bg-image d-flex justify-content-center align-items-center"
+  style="
+    background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/015.webp');
+    height: 30vh;
+    ">
+  
+  <div class="mask" style="background-color: rgba(178, 60, 253, 0.6);">
+    <div class="d-flex justify-content-center align-items-center mt-5 flex-column">
+      <h1 class="text-white  align-self-center" style="color: white !important;">@post.Title</h1>
+      <h2 class="text-white align-self-center mt-5 " style=" background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
+                                                                   background-position: 0 100%;
+                                                                   background-size: 100% 2px;
+                                                                   background-repeat: repeat-x;">@post?.Subtitle</h2>
+    </div>
+  </div>
+
+</div>
+  <main class="mt-4 mb-5">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-md-8 mb-4">
+          <section class="border-bottom mb-4">
+
+
+            <div class="row align-items-center mb-4">
+              <div class="col-lg-6 text-center text-lg-start mb-3 m-lg-0">
+                <img src="img/punk_avatar_user_boy_young_musician_-512.webp" class="rounded-5 shadow-1-strong me-2"
+                     height="35" alt="" loading="lazy"/>
+                <span> Posted on <u>@DateTime.Today.Date.ToShortDateString()</u> by</span>
+                <a href="" class="text-dark">@post?.WrittenBy?.UserName</a>
+              </div>
+
+              <div class="col-lg-6 text-center text-lg-end">
+
+                <button type="button" class="btn btn-primary px-3 me-1">
+                  <i class="fas fa-comments"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <p>
+              @post.Content
+            </p>
+          </section>
+          <hr/>
+          <br/>
+          <section>
+            <h2 style=" background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
+                                                                               background-position: 0 100%;
+                                                                               background-size: 100% 2px;
+                                                                               background-repeat: repeat-x;">Comments</h2>
+            <br/>
+            <div class="d-flex flex-column  ">
+              <AuthorizeView>
+                <Authorized Context="Auth">
+                  <EditForm Model="@_comment" OnValidSubmit="@AddComment">
+                    <DataAnnotationsValidator/>
+                    <ValidationSummary/>
+                    <div class="mb-3 ">
+                      <InputTextArea @bind-Value="_comment.Content" style=" width: 100% !important; resize: none; border:  #2cccc4 2px solid; border-radius: 10px; " class="form-control-lg " placeholder="  Click here to comment..." id="createPostTextArea" rows="4"></InputTextArea>
+                      <br/>
+                      <button class="btn btn-primary" type="submit">Comment</button>
+                    </div>
+                  </EditForm>
+                </Authorized>
+              </AuthorizeView>
+            </div>
+            <br/>
+            @if (comments == null)
+            {
+              <p>
+                <em>Loading...</em>
+              </p>
+            }
+            else if (!comments.Any())
+            {
+              <p>
+                <em>No comments exist</em>
+              </p>
+            }
+            else
+            {
+              @foreach (var comment in comments)
+              {
+                <div class="row mb-4">
+
+
+                  <div class="col-2">
+                    <img src="img/punk_avatar_user_boy_young_musician_-512.webp"
+                         class="img-fluid shadow-1-strong rounded-5" alt=""/>
+                  </div>
+
+                  <div class="col-10">
+                    <p class="mb-2"><strong>@comment.WrittenBy?.UserName</strong></p>
+                    <p>
+                      @comment.Content
+                    </p>
+                  </div>
+                </div>
+              }
+            }
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+}
+else
+{
+  <div
     class="bg-image d-flex justify-content-center align-items-center"
     style="
     background-image: url('https://mdbcdn.b-cdn.net/img/new/fluid/nature/015.webp');
     height: 30vh;
-  ">
+    ">
+  
     <div class="mask" style="background-color: rgba(178, 60, 253, 0.6);">
-        <div class="d-flex justify-content-center align-items-center mt-5 flex-column">
-            <h1 class="text-white  align-self-center" style="color: white !important;">@post.Title</h1>
-            <h2 class="text-white align-self-center mt-5 " style=" background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
-                                                                 background-position: 0 100%;
-                                                                 background-size: 100% 2px;
-                                                                 background-repeat: repeat-x;">@post.Subtitle</h2>
-        </div>
+      <div class="d-flex justify-content-center align-items-center mt-5 flex-column">
+        <h1 class="text-white  align-self-center" style="color: white !important;">Loading..</h1>
+        <h2 class="text-white align-self-center mt-5 " style=" background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
+                                                                   background-position: 0 100%;
+                                                                   background-size: 100% 2px;
+                                                                   background-repeat: repeat-x;">Loading..</h2>
+      </div>
     </div>
-    
-</div>
-<main class="mt-4 mb-5">
-<div class="container">
-  <div class="row">
-    
-    <div class="col-md-8 mb-4">
-      <section class="border-bottom mb-4">
-       
 
-        <div class="row align-items-center mb-4">
-          <div class="col-lg-6 text-center text-lg-start mb-3 m-lg-0">
-            <img src="img/punk_avatar_user_boy_young_musician_-512.webp" class="rounded-5 shadow-1-strong me-2"
-                 height="35" alt="" loading="lazy" />
-            <span> Posted on <u>@DateTime.Today.Date.ToShortDateString()</u> by</span>
-            <a href="" class="text-dark">@post.WrittenBy?.UserName</a>
-          </div>
-
-          <div class="col-lg-6 text-center text-lg-end">
-            
-            <button type="button" class="btn btn-primary px-3 me-1">
-              <i class="fas fa-comments"></i>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <p>
-          @post.Content
-        </p>
-      </section>
-      <hr/>
-      <br/>
-      <section>
-        <h2 style=" background: linear-gradient(to left, #f69ec4, #f9dd94 100%);
-                                                                             background-position: 0 100%;
-                                                                             background-size: 100% 2px;
-                                                                             background-repeat: repeat-x;">Comments</h2>
-        <br/>
-        <div class="d-flex flex-column  ">
-          <AuthorizeView>
-            <Authorized Context="Auth">
-            <EditForm Model="@_comment" OnValidSubmit="@AddComment">
-              <DataAnnotationsValidator/>
-              <ValidationSummary/>
-              <div class="mb-3 ">
-                <InputTextArea @bind-Value="_comment.Content" style=" width: 100% !important; resize: none; border:  #2cccc4 2px solid; border-radius: 10px; " class="form-control-lg " placeholder="  Click here to comment..." id="createPostTextArea" rows="4"></InputTextArea>
-                <br/>
-                <button class="btn btn-primary" type="submit">Comment</button>
-              </div>
-            </EditForm>
-            </Authorized>
-          </AuthorizeView>
-        </div>
-        <br/>
-        @if (comments == null)
-        {
-            <p>
-                <em>Loading...</em>
-            </p>
-        }
-        else if (!comments.Any())
-        {
-            <p>
-                <em>No comments exist</em>
-            </p>
-        }
-        else
-        {
-          @foreach (var comment in comments)
-          {
-            <div class="row mb-4">
-
-
-              <div class="col-2">
-                <img src="img/punk_avatar_user_boy_young_musician_-512.webp"
-                     class="img-fluid shadow-1-strong rounded-5" alt=""/>
-              </div>
-
-              <div class="col-10">
-                <p class="mb-2"><strong>@comment.WrittenBy?.UserName</strong></p>
-                <p>
-                  @comment.Content
-                </p>
-              </div>
-            </div>
-          }
-        }
-      </section>
-    </div>
   </div>
-</div>
-</main>
-
+}
 @code {
-    [Parameter]
-    public virtual int? Id { get; set; }
-    
-    [CascadingParameter]
-    public Task<AuthenticationState> AuthState { get; set; }
-  
-    public virtual  Post post { get; set; }
-  
-    private ClaimsPrincipal? user;
 
-  
-    private ICollection<Comment>? comments;
-    private Comment _comment=new Comment();
-    protected override async Task OnParametersSetAsync()
+  [Parameter]
+  public virtual int? Id { get; set; }
+
+  [CascadingParameter]
+  public Task<AuthenticationState> AuthState { get; set; }
+
+  public Post? post { get; set; }
+
+  private ClaimsPrincipal? user;
+
+  bool _ready = false;
+  private ICollection<Comment>? comments;
+  private Comment _comment = new Comment();
+
+  protected override async Task OnParametersSetAsync()
+  {
+    if (Id.HasValue)
     {
-        if (Id.HasValue)
-        {
-            post = await _postService.GetPostByIdAsync(Id.Value);
-        }
-        await base.OnParametersSetAsync();
+      post = await _postService.GetPostByIdAsync(Id.Value);
+      _ready = true;
     }
+    await base.OnParametersSetAsync();
+  }
 
-  protected  override async Task OnInitializedAsync()
+  protected override async Task OnInitializedAsync()
   {
     post = await _postService.GetPostByIdAsync(Id.Value);
     comments = await _postService.GetComments(post.Id);
@@ -146,12 +174,13 @@
   private async Task AddComment()
   {
     AuthenticationState authState = await AuthState;
-    if(authState.User.Identity==null) return;
+    if (authState.User.Identity == null) return;
     user = authState.User;
     Claim userName = user.Claims.First(c => c.Type.Equals("UserName"));
     User? u = await _userService.GetUserAsync(userName.Value);
     _comment.WrittenBy = u;
-     await _postService.AddCommentToPost(_comment,post.Id);
+    await _postService.AddCommentToPost(_comment, post.Id);
+    comments.Add(_comment);
     _comment = new Comment();
   }
 

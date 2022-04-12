@@ -12,7 +12,7 @@ public class PostFileDAO : IPostDAO
         _context = context;
     }
 
-    public async Task CreatePostAsync(Post post)
+    public async Task CreatePostAsync(Post? post)
     {
         if (_context.Forum.Posts != null && _context.Forum.Posts.Any())
         {
@@ -27,7 +27,7 @@ public class PostFileDAO : IPostDAO
         await _context.SaveChangesAsync();
     }
 
-    public Task<Post> GetPostByIdAsync(int id)
+    public Task<Post?> GetPostByIdAsync(int id)
     {
        return Task.FromResult(_context.Forum.Posts.First(post => post.Id == id));
     }
@@ -43,9 +43,9 @@ public class PostFileDAO : IPostDAO
          await _context.SaveChangesAsync();
     }
 
-    public async Task EditPostAsync(Post post)
+    public async Task EditPostAsync(Post? post)
     {
-        Post p = _context.Forum.Posts.First(p => post.Id == p.Id);
+        Post? p = _context.Forum.Posts.First(p => post.Id == p.Id);
         p.Content = post.Content;
         p.Title = post.Title;
         p.Subtitle = post.Subtitle;
@@ -54,14 +54,14 @@ public class PostFileDAO : IPostDAO
 
     public async Task AddCommentToPost(Comment comment, int id)
     {
-        Post p = _context.Forum.Posts.First(p => id == p.Id);
+        Post? p = _context.Forum.Posts.First(p => id == p.Id);
         p.Comments.Add(comment);
         await _context.SaveChangesAsync();
     }
 
     public Task<ICollection<Comment>> GetComments(int id)
     {
-        Post p = _context.Forum.Posts.First(p => id == p.Id);
+        Post? p = _context.Forum.Posts.First(p => id == p.Id);
         return  Task.FromResult(p.Comments!);
     }
 }

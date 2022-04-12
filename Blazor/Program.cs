@@ -1,11 +1,9 @@
-using Application.DAOs;
-using Application.Logic;
+
 using Blazorise;
 using BlazorLoginApp.Authentication;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Contract;
-using FileData.DataAccess;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;

@@ -13,7 +13,7 @@ public class PostServiceImpl : IPostService
         _dao = dao;
     }
 
-    public async Task CreatePostAsync(Post post)
+    public async Task CreatePostAsync(Post? post)
     {
         if (string.IsNullOrEmpty(post.Content) || string.IsNullOrEmpty(post.Title) ||
             string.IsNullOrEmpty(post.Subtitle))
@@ -24,7 +24,7 @@ public class PostServiceImpl : IPostService
         
     }
 
-    public Task<Post> GetPostByIdAsync(int id)
+    public Task<Post?> GetPostByIdAsync(int id)
     {
         return _dao.GetPostByIdAsync(id);
     }
@@ -39,7 +39,7 @@ public class PostServiceImpl : IPostService
         await _dao.DeletePostAsync(id);
     }
 
-    public async Task EditPostAsync(Post post)
+    public async Task EditPostAsync(Post? post)
     {
        await _dao.EditPostAsync(post);
     }

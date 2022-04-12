@@ -1,0 +1,49 @@
+{
+  "Posts": [
+    {
+      "Comments": [
+        {
+          "Content": "string",
+          "WrittenBy": {
+            "Name": "string",
+            "Role": "string",
+            "UserName": "string",
+            "Password": "string",
+            "SecurityLevel": 0
+          }
+        },
+        {
+          "Content": "fairydutst",
+          "WrittenBy": {
+            "Name": "Mihai Avram",
+            "Role": "admin",
+            "UserName": "Mike",
+            "Password": "12345",
+            "SecurityLevel": 1
+          }
+        },
+        {
+          "Content": "Loids",
+          "WrittenBy": {
+            "Name": "Mihai Avram",
+            "Role": "admin",
+            "UserName": "Mike",
+            "Password": "12345",
+            "SecurityLevel": 1
+          }
+        }
+      ],
+      "Id": 1,
+      "Title": "AKrls",
+      "Subtitle": "BVerg",
+      "Content": "Donec sollicitudin molestie malesuada. Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Pellentesque in ipsum id orci porta dapibus. Curabitur non nulla sit amet nisl tempus convallis quis ac lectus. Proin eget tortor risus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque in ipsum id orci porta dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel, ullamcorper sit amet ligula. Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec rutrum congue leo eget malesuada. Pellentesque in ipsum id orci porta dapibus. Proin eget tortor risus. Cras ultricies ligula sed magna dictum porta. Donec rutrum congue leo eget malesuada.",
+      "WrittenBy": {
+        "Name": "Kiddu Stelian",
+        "Role": "Basic",
+        "UserName": "Kid",
+        "Password": "user",
+        "SecurityLevel": 1
+      }
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 public class Forum
 {
-    public ICollection<Post>? Posts { get; set; }
+    public ICollection<Post?>? Posts { get; set; }
    
     public Forum()
     {

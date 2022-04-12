@@ -122,10 +122,21 @@
         ToRemoveTempId = 0;
     }
 
-    private async Task DeletePost()
+    private async  Task DeletePost()
     {
-        await _postService.DeletePostAsync(ToRemoveTempId);
-        await CloseModal();
+        try
+        {
+            await _postService.DeletePostAsync(ToRemoveTempId);
+            Post rem = allPosts.First(post => post.Id == ToRemoveTempId);
+            allPosts.Remove(rem);
+            RemoveModal = false;
+            ToRemoveTempId = 0;
+        }
+        catch (Exception e)
+        {
+            await Console.Error.WriteLineAsync(e.Message);
+        }
+
     }
 
     private async Task<bool> IsAllowed(Post p)

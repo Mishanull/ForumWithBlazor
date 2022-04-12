@@ -1,4 +1,5 @@
-﻿using Contract;
+﻿using System.Collections;
+using Contract;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +30,7 @@ public class PostController: ControllerBase
         }
     }
     [HttpPost]
-    public async Task<ActionResult<Post>> CreatePost([FromBody] Post post)
+    public async Task<ActionResult<Post>> CreatePost([FromBody] Post? post)
     {
         try
         {
@@ -48,7 +49,7 @@ public class PostController: ControllerBase
     {
         try
         {
-            Post p= await _postService.GetPostByIdAsync(id);
+            Post? p= await _postService.GetPostByIdAsync(id);
             return Ok(p);
 
         }
@@ -59,7 +60,7 @@ public class PostController: ControllerBase
     }
     [HttpPatch]
     [Route("{id:int}")]
-    public async Task<ActionResult<String>> UpdatePost([FromBody] Post post)
+    public async Task<ActionResult<String>> UpdatePost([FromBody] Post? post)
     {
         try
         {
@@ -81,6 +82,36 @@ public class PostController: ControllerBase
         {
             await _postService.DeletePostAsync(id);
             return Ok("Post " + id + " succesfully deleted");
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+    [HttpPost]
+    [Route("{id:int}/comments")]
+    public async Task<ActionResult<Comment>> CreateComment([FromRoute] int id, [FromBody] Comment comment)
+    {
+        try
+        {
+            await _postService.AddCommentToPost(comment,id);
+            return Created($"/id/comments",comment);
+
+        }
+        catch (Exception e)
+        {
+            return StatusCode(500, e.Message);
+        }
+    }
+    [HttpGet]
+    [Route("{id:int}/comments")]
+    public async Task<ActionResult<ICollection<Comment>>> GetComments([FromRoute] int id)
+    {
+        try
+        {
+            ICollection<Comment> comments=await _postService.GetComments(id);
+            return Ok(comments);
+
         }
         catch (Exception e)
         {

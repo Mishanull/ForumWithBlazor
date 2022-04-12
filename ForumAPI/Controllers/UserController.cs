@@ -20,7 +20,7 @@ public class UserController : ControllerBase
     {
         try
         {
-            User u = await _userService.GetUserAsync(username);
+            User? u = await _userService.GetUserAsync(username);
             return Ok(u);
         }
         catch (Exception e)
