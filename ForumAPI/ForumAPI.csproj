@@ -12,7 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Contracts\Contracts.csproj" />
-      <ProjectReference Include="..\FileData\FileData.csproj" />
+      <ProjectReference Include="..\EFCMySqlData\EFCMySqlData.csproj" />
     </ItemGroup>
 
 </Project>

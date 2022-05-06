@@ -1,7 +1,7 @@
 using Application.DAOs;
 using Application.Logic;
 using Contract;
-using FileData.DataAccess;
+using EFCPostgresData;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserServiceImpl>();
 builder.Services.AddScoped<IPostService, PostServiceImpl>();
-builder.Services.AddScoped<IPostDAO, PostFileDAO>();
-builder.Services.AddScoped<IUserDAO, UserFileDAO>();
-builder.Services.AddScoped<UserFileContext>();
-builder.Services.AddScoped<PostFileContext>();
+builder.Services.AddScoped<IPostDAO, PostDao>();
+builder.Services.AddScoped<IUserDAO, UserDao>();
+builder.Services.AddScoped<ForumContext>();
 
 var app = builder.Build();
 

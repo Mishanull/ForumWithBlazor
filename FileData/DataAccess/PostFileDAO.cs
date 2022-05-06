@@ -5,9 +5,9 @@ namespace FileData.DataAccess;
 
 public class PostFileDAO : IPostDAO
 {
-    private PostFileContext _context;
+    private ForumFileContext _context;
 
-    public PostFileDAO(PostFileContext context)
+    public PostFileDAO(ForumFileContext context)
     {
         _context = context;
     }

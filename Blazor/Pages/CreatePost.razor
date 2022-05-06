@@ -77,7 +77,7 @@
             user = authState.User;
             Claim userName = user.Claims.First(c => c.Type.Equals("UserName"));
             User? u = await _userService.GetUserAsync(userName.Value);
-            newPost.WrittenBy = u;
+            newPost!.WrittenBy = u;
             await _postService.CreatePostAsync(newPost);
             showModal = true;
             newPost = new Post();

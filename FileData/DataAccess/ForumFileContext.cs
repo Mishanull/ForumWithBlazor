@@ -3,7 +3,7 @@ using Entities;
 
 namespace FileData.DataAccess;
 
-public class PostFileContext
+public class ForumFileContext
 {
     private string forumPath = "forum.json";
 
@@ -23,7 +23,7 @@ public class PostFileContext
     }
 
     public 
-        PostFileContext()
+        ForumFileContext()
     {
         if (File.Exists(forumPath))
         {

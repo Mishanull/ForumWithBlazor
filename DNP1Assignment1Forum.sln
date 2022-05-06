@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ForumAPI", "ForumAPI\ForumA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTClient", "RESTClient\RESTClient.csproj", "{1990F25E-DE5E-46C4-A8FE-8E1F8345BD43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCMySqlData", "EFCMySqlData\EFCMySqlData.csproj", "{350C6C11-3941-4F12-9588-1B77975DB664}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{1990F25E-DE5E-46C4-A8FE-8E1F8345BD43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1990F25E-DE5E-46C4-A8FE-8E1F8345BD43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1990F25E-DE5E-46C4-A8FE-8E1F8345BD43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{350C6C11-3941-4F12-9588-1B77975DB664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{350C6C11-3941-4F12-9588-1B77975DB664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{350C6C11-3941-4F12-9588-1B77975DB664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{350C6C11-3941-4F12-9588-1B77975DB664}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
